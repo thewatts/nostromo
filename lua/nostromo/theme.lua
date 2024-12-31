@@ -18,6 +18,32 @@ local colors = {
 
 local M = {}
 
+-- Lualine theme
+M.lualine = {
+  normal = {
+    a = { fg = colors.bg, bg = colors.blue, gui = "bold" },
+    b = { fg = colors.fg, bg = colors.bg },
+    c = { fg = colors.light_gray, bg = colors.bg }
+  },
+  insert = {
+    a = { fg = colors.bg, bg = colors.green, gui = "bold" },
+  },
+  visual = {
+    a = { fg = colors.bg, bg = colors.orange, gui = "bold" },
+  },
+  replace = {
+    a = { fg = colors.bg, bg = colors.red, gui = "bold" },
+  },
+  command = {
+    a = { fg = colors.bg, bg = colors.cyan, gui = "bold" },
+  },
+  inactive = {
+    a = { fg = colors.gray, bg = colors.bg },
+    b = { fg = colors.gray, bg = colors.bg },
+    c = { fg = colors.gray, bg = colors.bg }
+  }
+}
+
 function M.setup()
   local highlight = function(group, opts)
     vim.api.nvim_set_hl(0, group, opts)
