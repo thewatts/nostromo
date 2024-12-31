@@ -1,10 +1,11 @@
 local M = {}
 
-M.name = "nostromo"
-M.version = "0.0.1"
+-- Export theme colors and config for other plugins to use
+M.colors = require("nostromo.theme").colors
+M.lualine = require("nostromo.theme").lualine
 
-function M.init()
-end
+M.name = "nostromo"
+M.version = "0.0.2"
 
 function M.setup(opts)
   opts = opts or {}

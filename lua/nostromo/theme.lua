@@ -140,8 +140,7 @@ M.lualine = {
   }
 }
 
--- Setup function
-function M.setup()
+function M.setup(opts)
   if vim.version().minor < 8 then
     vim.notify("Nostromo theme requires Neovim 0.8+", vim.log.levels.ERROR)
     return
