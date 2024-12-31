@@ -5,7 +5,7 @@ M.colors = require("nostromo.theme").colors
 M.lualine = require("nostromo.theme").lualine
 
 M.name = "nostromo"
-M.version = "0.0.3"
+M.version = "0.0.4"
 
 function M.setup(opts)
   opts = opts or {}

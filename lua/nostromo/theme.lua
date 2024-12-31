@@ -1,161 +1,200 @@
-local M = {}
-
 -- Color palette
-M.colors = {
+local colors = {
   bg = "#141D22",
   fg = "#A5FBFF",
   gray = "#3a4c4e",
   light_gray = "#91b0b1",
-  blue = "#34A2DF",
-  light_blue = "#4DDCFF",
+  red = "#dd513c",
   green = "#3df2ad",
+  blue = "#34A2DF",
+  cyan = "#4DDCFF",
+  light_blue = "#A5FBFF",
+  dark_blue = "#3f9bbc",
   orange = "#ffb78a",
   pink = "#eb78c3",
-  red = "#dd513c",
-  string_blue = "#3f9bbc",
-  border = "#154547",
-  selection = "#1a262d",
   warning = "#FFFF84",
-  error = "#913f4c",
+  border = "#154547",
 }
 
-M.groups = {
-  Normal = { fg = M.colors.fg, bg = M.colors.bg },
-  NormalFloat = { fg = M.colors.fg, bg = M.colors.bg },
-  Comment = { fg = M.colors.gray },
-  Cursor = { fg = M.colors.bg, bg = M.colors.fg },
-  CursorLine = { bg = M.colors.selection },
-  CursorLineNr = { fg = M.colors.fg },
-  LineNr = { fg = M.colors.gray },
+local M = {}
 
-  -- Syntax highlighting
-  Constant = { fg = M.colors.green },
-  String = { fg = M.colors.string_blue },
-  Character = { fg = M.colors.string_blue },
-  Number = { fg = M.colors.light_blue },
-  Boolean = { fg = M.colors.light_blue },
-  Float = { fg = M.colors.light_blue },
+function M.setup()
+  local highlight = function(group, opts)
+    vim.api.nvim_set_hl(0, group, opts)
+  end
 
-  Identifier = { fg = M.colors.fg },
-  Function = { fg = M.colors.green },
+  -- Reset all highlights
+  vim.cmd('highlight clear')
+  if vim.fn.exists('syntax_on') then
+    vim.cmd('syntax reset')
+  end
 
-  Statement = { fg = M.colors.red },
-  Keyword = { fg = M.colors.red },
-  Conditional = { fg = M.colors.red },
-  Repeat = { fg = M.colors.red },
-  Label = { fg = M.colors.red },
-  Operator = { fg = M.colors.fg },
-  Exception = { fg = M.colors.red },
+  -- Set colorscheme name
+  vim.g.colors_name = 'nostromo'
 
-  PreProc = { fg = M.colors.red },
-  Include = { fg = M.colors.red },
-  Define = { fg = M.colors.red },
-  Macro = { fg = M.colors.green },
-  PreCondit = { fg = M.colors.red },
+  -- Editor highlights
+  local editor = {
+    Normal = { fg = colors.fg, bg = colors.bg },
+    NormalFloat = { fg = colors.fg, bg = colors.bg },
+    SignColumn = { bg = colors.bg },
+    MsgArea = { fg = colors.fg, bg = colors.bg },
+    ModeMsg = { fg = colors.fg, bold = true },
+    CursorLine = { bg = colors.bg },
+    CursorLineNr = { fg = colors.fg },
+    LineNr = { fg = colors.gray },
+    Cursor = { fg = colors.fg },
+    VertSplit = { fg = colors.border },
+    FloatBorder = { fg = colors.border },
+    MatchParen = { fg = colors.cyan, bold = true },
+    NonText = { fg = colors.gray },
 
-  Type = { fg = M.colors.light_blue },
-  StorageClass = { fg = M.colors.red },
-  Structure = { fg = M.colors.light_blue },
-  Typedef = { fg = M.colors.light_blue },
+    -- Status line
+    StatusLine = { fg = colors.light_gray, bg = colors.bg },
+    StatusLineNC = { fg = colors.gray, bg = colors.bg },
 
-  Special = { fg = M.colors.orange },
+    -- Tab line
+    TabLine = { fg = colors.gray, bg = colors.bg },
+    TabLineFill = { bg = colors.bg },
+    TabLineSel = { fg = colors.fg, bg = colors.border },
 
-  -- Treesitter
-  ["@keyword"] = { fg = M.colors.red },
-  ["@keyword.function"] = { fg = M.colors.red },
-  ["@keyword.operator"] = { fg = M.colors.red },
-  ["@keyword.return"] = { fg = M.colors.red },
+    -- Completion menu
+    Pmenu = { fg = colors.light_gray, bg = colors.bg },
+    PmenuSel = { fg = colors.fg, bg = colors.border },
+    PmenuSbar = { bg = colors.bg },
+    PmenuThumb = { bg = colors.border },
 
-  ["@function"] = { fg = M.colors.green },
-  ["@function.call"] = { fg = M.colors.green },
-  ["@function.builtin"] = { fg = M.colors.green },
-  ["@function.macro"] = { fg = M.colors.green },
+    -- Search
+    Search = { fg = colors.bg, bg = colors.blue },
+    IncSearch = { fg = colors.bg, bg = colors.blue },
 
-  ["@type"] = { fg = M.colors.light_blue },
-  ["@type.builtin"] = { fg = M.colors.light_blue },
-  ["@type.definition"] = { fg = M.colors.light_blue },
-  ["@type.qualifier"] = { fg = M.colors.red },
+    -- Visual mode
+    Visual = { bg = colors.border },
+    VisualNOS = { bg = colors.border },
 
-  ["@variable"] = { fg = M.colors.fg },
-  ["@variable.builtin"] = { fg = M.colors.green },
-
-  ["@constant"] = { fg = M.colors.green },
-  ["@constant.builtin"] = { fg = M.colors.green },
-  ["@constant.macro"] = { fg = M.colors.green },
-
-  ["@string"] = { fg = M.colors.string_blue },
-  ["@string.escape"] = { fg = M.colors.orange },
-
-  ["@comment"] = { fg = M.colors.gray },
-
-  -- UI elements
-  Pmenu = { fg = M.colors.light_gray, bg = M.colors.bg },
-  PmenuSel = { fg = M.colors.fg, bg = M.colors.selection },
-  PmenuSbar = { bg = M.colors.bg },
-  PmenuThumb = { bg = M.colors.selection },
-
-  StatusLine = { fg = M.colors.light_gray, bg = M.colors.bg },
-  StatusLineNC = { fg = M.colors.gray, bg = M.colors.bg },
-
-  TabLine = { fg = M.colors.gray, bg = M.colors.bg },
-  TabLineFill = { bg = M.colors.bg },
-  TabLineSel = { fg = M.colors.fg, bg = M.colors.selection },
-
-  Search = { fg = M.colors.bg, bg = M.colors.blue },
-  IncSearch = { fg = M.colors.bg, bg = M.colors.green },
-
-  Visual = { bg = M.colors.selection },
-  VisualNOS = { bg = M.colors.selection },
-
-  DiagnosticError = { fg = M.colors.error },
-  DiagnosticWarn = { fg = M.colors.warning },
-  DiagnosticInfo = { fg = M.colors.blue },
-  DiagnosticHint = { fg = M.colors.green },
-}
-
--- Lualine theme
-M.lualine = {
-  normal = {
-    a = { fg = M.colors.bg, bg = M.colors.blue, gui = "bold" },
-    b = { fg = M.colors.fg, bg = M.colors.bg },
-    c = { fg = M.colors.light_gray, bg = M.colors.bg }
-  },
-  insert = {
-    a = { fg = M.colors.bg, bg = M.colors.green, gui = "bold" },
-  },
-  visual = {
-    a = { fg = M.colors.bg, bg = M.colors.orange, gui = "bold" },
-  },
-  replace = {
-    a = { fg = M.colors.bg, bg = M.colors.red, gui = "bold" },
-  },
-  command = {
-    a = { fg = M.colors.bg, bg = M.colors.light_blue, gui = "bold" },
-  },
-  inactive = {
-    a = { fg = M.colors.gray, bg = M.colors.bg },
-    b = { fg = M.colors.gray, bg = M.colors.bg },
-    c = { fg = M.colors.gray, bg = M.colors.bg }
+    -- Diagnostics
+    DiagnosticError = { fg = colors.red },
+    DiagnosticWarn = { fg = colors.warning },
+    DiagnosticInfo = { fg = colors.blue },
+    DiagnosticHint = { fg = colors.green },
   }
-}
 
-function M.setup(opts)
-  if vim.version().minor < 8 then
-    vim.notify("Nostromo theme requires Neovim 0.8+", vim.log.levels.ERROR)
-    return
+  -- Syntax highlights
+  local syntax = {
+    Comment = { fg = colors.gray },
+    Constant = { fg = colors.green },
+    String = { fg = colors.dark_blue },
+    Character = { fg = colors.dark_blue },
+    Number = { fg = colors.cyan },
+    Boolean = { fg = colors.cyan },
+    Float = { fg = colors.cyan },
+    Identifier = { fg = colors.fg },
+    Function = { fg = colors.green },
+    Statement = { fg = colors.red },
+    Conditional = { fg = colors.red },
+    Repeat = { fg = colors.red },
+    Label = { fg = colors.red },
+    Operator = { fg = colors.red },
+    Keyword = { fg = colors.red },
+    Exception = { fg = colors.red },
+    PreProc = { fg = colors.green },
+    Include = { fg = colors.red },
+    Define = { fg = colors.red },
+    Macro = { fg = colors.green },
+    Type = { fg = colors.cyan },
+    StorageClass = { fg = colors.red },
+    Structure = { fg = colors.cyan },
+    Special = { fg = colors.blue },
+    SpecialChar = { fg = colors.dark_blue },
+    Tag = { fg = colors.red },
+    SpecialComment = { fg = colors.gray },
+  }
+
+  -- Tree-sitter highlights
+  local treesitter = {
+    ["@comment"] = { link = "Comment" },
+    ["@error"] = { fg = colors.red },
+    ["@none"] = { fg = colors.fg },
+    ["@preproc"] = { link = "PreProc" },
+    ["@define"] = { link = "Define" },
+    ["@operator"] = { link = "Operator" },
+
+    -- Punctuation
+    ["@punctuation.delimiter"] = { fg = colors.fg },
+    ["@punctuation.bracket"] = { fg = colors.fg },
+    ["@punctuation.special"] = { fg = colors.blue },
+
+    -- Literals
+    ["@string"] = { link = "String" },
+    ["@string.regex"] = { fg = colors.dark_blue },
+    ["@string.escape"] = { fg = colors.cyan },
+    ["@string.special"] = { fg = colors.cyan },
+    ["@character"] = { link = "Character" },
+    ["@number"] = { link = "Number" },
+    ["@boolean"] = { link = "Boolean" },
+    ["@float"] = { link = "Float" },
+
+    -- Functions
+    ["@function"] = { fg = colors.green },
+    ["@function.call"] = { fg = colors.green },
+    ["@function.builtin"] = { fg = colors.green },
+    ["@function.macro"] = { fg = colors.green },
+    ["@method"] = { fg = colors.green },
+    ["@method.call"] = { fg = colors.green },
+    ["@constructor"] = { fg = colors.cyan },
+    ["@parameter"] = { fg = colors.light_gray },
+
+    -- Keywords
+    ["@keyword"] = { fg = colors.red },
+    ["@keyword.function"] = { fg = colors.red },
+    ["@keyword.operator"] = { fg = colors.red },
+    ["@keyword.return"] = { fg = colors.red },
+
+    -- Types
+    ["@type"] = { fg = colors.cyan },
+    ["@type.builtin"] = { fg = colors.cyan },
+    ["@type.qualifier"] = { fg = colors.red },
+    ["@type.definition"] = { fg = colors.cyan },
+
+    -- Identifiers
+    ["@variable"] = { fg = colors.fg },
+    ["@variable.builtin"] = { fg = colors.green },
+    ["@constant"] = { fg = colors.green },
+    ["@constant.builtin"] = { fg = colors.green },
+    ["@constant.macro"] = { fg = colors.green },
+    ["@namespace"] = { fg = colors.green },
+    ["@symbol"] = { fg = colors.blue },
+  }
+
+  -- Set all highlights
+  for group, opts in pairs(editor) do
+    highlight(group, opts)
   end
 
-  vim.cmd("hi clear")
-  if vim.fn.exists("syntax_on") then
-    vim.cmd("syntax reset")
+  for group, opts in pairs(syntax) do
+    highlight(group, opts)
   end
-  vim.o.termguicolors = true
-  vim.g.colors_name = "nostromo"
 
-  -- Apply highlight groups
-  for group, settings in pairs(M.groups) do
-    vim.api.nvim_set_hl(0, group, settings)
+  for group, opts in pairs(treesitter) do
+    highlight(group, opts)
   end
+
+  -- Terminal colors
+  vim.g.terminal_color_0 = colors.bg
+  vim.g.terminal_color_1 = colors.red
+  vim.g.terminal_color_2 = colors.green
+  vim.g.terminal_color_3 = colors.orange
+  vim.g.terminal_color_4 = colors.blue
+  vim.g.terminal_color_5 = colors.pink
+  vim.g.terminal_color_6 = colors.cyan
+  vim.g.terminal_color_7 = colors.fg
+  vim.g.terminal_color_8 = colors.gray
+  vim.g.terminal_color_9 = colors.red
+  vim.g.terminal_color_10 = colors.green
+  vim.g.terminal_color_11 = colors.orange
+  vim.g.terminal_color_12 = colors.blue
+  vim.g.terminal_color_13 = colors.pink
+  vim.g.terminal_color_14 = colors.cyan
+  vim.g.terminal_color_15 = colors.fg
 end
 
 return M
