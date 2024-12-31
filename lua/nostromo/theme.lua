@@ -1,4 +1,3 @@
--- colors/nostromo.lua
 local M = {}
 
 -- Color palette
@@ -15,7 +14,7 @@ M.colors = {
   red = "#dd513c",
   string_blue = "#3f9bbc",
   border = "#154547",
-  selection = "#cdf1f311",
+  selection = "#1a262d",
   warning = "#FFFF84",
   error = "#913f4c",
 }
