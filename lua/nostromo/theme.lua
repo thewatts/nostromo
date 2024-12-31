@@ -106,7 +106,7 @@ function M.setup()
 
   -- Syntax highlights
   local syntax = {
-    Comment = { fg = colors.gray },
+    Comment = { fg = colors.gray, italic = true },
     Constant = { fg = colors.green },
     String = { fg = colors.dark_blue },
     Character = { fg = colors.dark_blue },
@@ -132,12 +132,12 @@ function M.setup()
     Special = { fg = colors.blue },
     SpecialChar = { fg = colors.dark_blue },
     Tag = { fg = colors.red },
-    SpecialComment = { fg = colors.gray },
+    SpecialComment = { fg = colors.gray, italic = true },
   }
 
   -- Tree-sitter highlights
   local treesitter = {
-    ["@comment"] = { link = "Comment" },
+    ["@comment"] = { fg = colors.gray, italic = true },
     ["@error"] = { fg = colors.red },
     ["@none"] = { fg = colors.fg },
     ["@preproc"] = { link = "PreProc" },
