@@ -3,6 +3,7 @@ local colors = {
   bg = "#141D22",
   fg = "#A5FBFF",
   gray = "#3a4c4e",
+  dark_gray = "#1e2628", -- Darker version for subtle highlights
   light_gray = "#91b0b1",
   red = "#dd513c",
   green = "#3df2ad",
@@ -60,6 +61,7 @@ function M.setup()
 
   -- Editor highlights
   local editor = {
+    -- Basic UI elements
     Normal = { fg = colors.fg, bg = colors.bg },
     NormalFloat = { fg = colors.fg, bg = colors.bg },
     SignColumn = { bg = colors.bg },
@@ -68,6 +70,7 @@ function M.setup()
     CursorLine = { bg = colors.bg },
     CursorLineNr = { fg = colors.fg },
     LineNr = { fg = colors.gray },
+    ColorColumn = { bg = colors.dark_gray },
     Cursor = { fg = colors.fg },
     VertSplit = { fg = colors.border },
     FloatBorder = { fg = colors.border },
