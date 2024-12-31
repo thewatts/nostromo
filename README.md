@@ -15,7 +15,7 @@ Using [lazy.nvim](https://github.com/folke/lazy.nvim):
 
 ```lua
 return {
-  "thewattswatts/nostromo.nvim",
+  "thewatts/nostromo.nvim",
   version = "0.0.6",
   lazy = false,
   priority = 1000,
