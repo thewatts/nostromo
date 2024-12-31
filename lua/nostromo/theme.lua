@@ -72,7 +72,11 @@ function M.setup()
     LineNr = { fg = colors.gray },
     ColorColumn = { bg = colors.dark_gray },
     Cursor = { fg = colors.fg },
-    VertSplit = { fg = colors.border },
+    -- Split borders (invisible)
+    VertSplit = { fg = colors.bg },
+    WinSeparator = { fg = colors.bg }, -- For newer versions of Neovim
+    StatusLine = { fg = colors.gray, bg = colors.bg },
+    StatusLineNC = { fg = colors.gray, bg = colors.bg },
     FloatBorder = { fg = colors.border },
     MatchParen = { fg = colors.cyan, bold = true },
     NonText = { fg = colors.gray },
