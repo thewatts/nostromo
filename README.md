@@ -20,7 +20,9 @@ return {
   lazy = false,
   priority = 1000,
   config = function()
-    require("nostromo").setup()
+    require("nostromo").setup({
+      visible_borders = false -- defaults to false, set to true to enable visible borders
+    })
   end,
 }
 ```
@@ -32,6 +34,10 @@ require("nostromo").setup({
   -- Configuration options will go here
 })
 ```
+
+### Configuration Options
+
+- `visible_borders` (boolean): Whether or not to show visible borders. Defaults to `false`.
 
 ### Lualine
 
