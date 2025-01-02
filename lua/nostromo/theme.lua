@@ -17,14 +17,20 @@ local colors = {
   border = "#154547",
 }
 
-local M = {}
+local M = {
+  default_options = {
+    visible_borders = false,
+  },
+}
+
+M.options = M.default_options
 
 -- Lualine theme
 M.lualine = {
   normal = {
     a = { fg = colors.bg, bg = colors.blue, gui = "bold" },
     b = { fg = colors.fg, bg = colors.bg },
-    c = { fg = colors.light_gray, bg = colors.bg }
+    c = { fg = colors.light_gray, bg = colors.bg },
   },
   insert = {
     a = { fg = colors.bg, bg = colors.green, gui = "bold" },
@@ -41,23 +47,25 @@ M.lualine = {
   inactive = {
     a = { fg = colors.gray, bg = colors.bg },
     b = { fg = colors.gray, bg = colors.bg },
-    c = { fg = colors.gray, bg = colors.bg }
-  }
+    c = { fg = colors.gray, bg = colors.bg },
+  },
 }
 
-function M.setup()
+function M.setup(user_conf)
+  M.options = vim.tbl_deep_extend("keep", user_conf, M.default_options)
+
   local highlight = function(group, opts)
     vim.api.nvim_set_hl(0, group, opts)
   end
 
   -- Reset all highlights
-  vim.cmd('highlight clear')
-  if vim.fn.exists('syntax_on') then
-    vim.cmd('syntax reset')
+  vim.cmd("highlight clear")
+  if vim.fn.exists("syntax_on") then
+    vim.cmd("syntax reset")
   end
 
   -- Set colorscheme name
-  vim.g.colors_name = 'nostromo'
+  vim.g.colors_name = "nostromo"
 
   -- Editor highlights
   local editor = {
@@ -73,10 +81,8 @@ function M.setup()
     ColorColumn = { bg = colors.dark_gray },
     Cursor = { fg = colors.fg },
     -- Split borders (invisible)
-    VertSplit = { fg = colors.bg },
-    WinSeparator = { fg = colors.bg }, -- For newer versions of Neovim
-    StatusLine = { fg = colors.gray, bg = colors.bg },
-    StatusLineNC = { fg = colors.gray, bg = colors.bg },
+    VertSplit = { fg = M.options.visible_borders and colors.dark_gray or colors.bg },
+    WinSeparator = { fg = M.options.visible_borders and colors.dark_gray or colors.bg }, -- For newer versions of Neovim
     FloatBorder = { fg = colors.border },
     MatchParen = { fg = colors.cyan, bold = true },
     NonText = { fg = colors.gray },
@@ -198,6 +204,13 @@ function M.setup()
     ["@symbol"] = { fg = colors.blue },
   }
 
+  local mini_files = {
+    MiniFilesDirectory = { fg = colors.dark_blue },
+    MiniFilesFile = { fg = colors.light_blue },
+    MiniFilesCursorLine = { fg = colors.red, bg = colors.dark_gray },
+    MiniFilesBorderModified = { fg = colors.red },
+  }
+
   -- Set all highlights
   for group, opts in pairs(editor) do
     highlight(group, opts)
@@ -208,6 +221,10 @@ function M.setup()
   end
 
   for group, opts in pairs(treesitter) do
+    highlight(group, opts)
+  end
+
+  for group, opts in pairs(mini_files) do
     highlight(group, opts)
   end
 
